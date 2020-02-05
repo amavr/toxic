@@ -86,11 +86,7 @@
         }
 
         let getUrl = function () {
-            let $url = $('#inp-url');
-            let url = $url.val();
-            let b64 = b64EncodeUnicode(url);
-            console.log(b64);
-            return b64;
+            return b64EncodeUnicode($('#inp-url').val());
         }
 
         /// https://developer.mozilla.org/ru/docs/Web/API/WindowBase64/Base64_encoding_and_decoding

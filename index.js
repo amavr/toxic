@@ -1,12 +1,11 @@
 'use strict';
 
+const config = require('config');
 const restify = require('restify');
 const crypto = require('crypto');
 const redis = require('redis');
 
-const redis_host = 'localhost';
-const redis_port = 6379;
-const redis_client = redis.createClient(redis_port, redis_host);
+const redis_client = redis.createClient(config.get('redis.port'), config.get('redis.host'));
 const server = restify.createServer();
 
 server.use(restify.plugins.acceptParser(server.acceptable));
@@ -21,7 +20,6 @@ server.get('/api/v1/:x', (req, res, next) => {
 
     redis_client.exists(url_key, (err, exists) => {
         if (exists === 1) {
-            console.log('increment')
             redis_client.get(url_key, (err, reply) => {
                 res.send(200, {toxic: reply});
                 next();
