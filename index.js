@@ -89,6 +89,8 @@ server.get('/*', restify.plugins.serveStatic({
     directory: './public'
 }));
 
-server.listen(config.get('server.port'), function () {
+const port = process.env.PORT || config.get('server.port');
+
+server.listen(port, function () {
     console.log('%s listening at %s', server.name, server.url);
 });
