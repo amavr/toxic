@@ -24,11 +24,17 @@
         <p>Скопируй сюда URL профиля из соц.сети</p>
         <div id="box-toxic" class="input-group mb-3">
             <div class="input-group-prepend">
-                <button class="btn btn-info" type="button" id="btn-look">Проверить</button>
+                <button class="btn btn-info" type="button" id="btn-look">
+                    Чек
+                    <span class="spinner-grow spinner-grow-sm" style="display: none;" role="status" aria-hidden="true"></span>
+                </button>
             </div>
             <input type="text" class="form-control" placeholder="https://vk.com/usernick" id="inp-url" disabled>
             <div class="input-group-append">
-                <button class="btn btn-danger" type="button" id="btn-toxic">Токсичный!</button>
+                <button class="btn btn-danger" type="button" id="btn-toxic">
+                    <span class="spinner-grow spinner-grow-sm" style="display: none;" role="status" aria-hidden="true"></span>
+                    Токс
+                </button>
             </div>
         </div>
 
@@ -55,14 +61,17 @@
 
             let getToxic = function(){
                 const user_url = getUrl();
+                $('#btn-look .spinner-grow').show();
                 query.get({
                     url: '/v1/' + user_url
                 },
                     data => {
+                        $('#btn-look .spinner-grow').hide();
                         console.log(data);
                         $('#box-result').text('Токсичность: ' + data.toxic);
                     },
                     error => {
+                        $('#btn-look .spinner-grow').hide();
                         console.log(error);
                     }
                 )
@@ -81,15 +90,18 @@
 
             $('#btn-toxic').on('click', e => {
                 const user_url = getUrl();
+                $('#btn-toxic .spinner-grow').show();
                 query.post({
                     url: '/v1/' + user_url,
                     data: fp
                 },
                     data => {
+                        $('#btn-toxic .spinner-grow').hide();
                         console.log(data);
                         $('#box-result').text('Молодец, чё!');
                     },
                     error => {
+                        $('#btn-toxic .spinner-grow').hide();
                         console.log(error);
                     }
                 )
