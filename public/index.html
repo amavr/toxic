@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+    </script>
+    <script type="application/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
+    <script type="application/javascript" src="api.js"></script>
+</head>
+
+<body>
+    <div style="padding: 10px;">
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="btn-look">LOOK</span>
+        </div>
+        <input type="text" class="form-control" placeholder="User page" aria-label="User page" id="inp-url" disabled
+            value="https://vk.com/kriptong">
+        <div class="input-group-append">
+            <span class="input-group-text" id="btn-toxic">TOXIC</span>
+        </div>
+    </div>
+
+        <div class="card-body" id="box-result"></div>
+</div style="padding: 10px;">
+
+    <script>
+        let fp = null;
+
+        function ready() {
+            console.log('started');
+
+            const query = new Query();
+
+            if (window.requestIdleCallback) {
+                requestIdleCallback(function () {
+                    updateFP();
+                })
+            } else {
+                setTimeout(function () {
+                    updateFP();
+                }, 500)
+            }
+
+            $('#btn-look').on('click', e => {
+                const user_url = getUrl();
+                query.get({
+                        url: '/v1/' + user_url
+                    },
+                    data => {
+                        console.log(data);
+                        $('#box-result').text('TOXIC: ' + data.toxic);
+                    },
+                    error => {
+                        console.log(error);
+                    }
+                )
+            });
+
+            $('#btn-toxic').on('click', e => {
+                const user_url = getUrl();
+                query.post({
+                        url: '/v1/' + user_url,
+                        data: fp
+                    },
+                    data => {
+                        console.log(data);
+                        $('#box-result').text('THANKS!');
+                    },
+                    error => {
+                        console.log(error);
+                    }
+                )
+            });
+
+
+        }
+
+        let getUrl = function () {
+            let $url = $('#inp-url');
+            let url = $url.val();
+            let b64 = b64EncodeUnicode(url);
+            console.log(b64);
+            return b64;
+        }
+
+        /// https://developer.mozilla.org/ru/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
+        function b64EncodeUnicode(str) {
+            return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+                function toSolidBytes(match, p1) {
+                    return String.fromCharCode('0x' + p1);
+                }));
+        }
+
+        let updateFP = function () {
+            let x = '';
+            Fingerprint2.get(function (components) {
+                fp = components;
+                $('#inp-url').removeAttr('disabled');
+            });
+        }
+
+        String.prototype.hashCode = function () {
+            var hash = 0,
+                i, chr;
+            if (this.length === 0) return hash;
+            for (i = 0; i < this.length; i++) {
+                chr = this.charCodeAt(i);
+                hash = ((hash << 5) - hash) + chr;
+                hash |= 0; // Convert to 32bit integer
+            }
+            return hash;
+        };
+
+        document.addEventListener("DOMContentLoaded", ready);
+    </script>
+</body>
+
+</html>

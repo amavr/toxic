@@ -1,0 +1,18 @@
+{
+  "name": "toxic",
+  "version": "1.0.0",
+  "description": "Toxic mans",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bunyan": "^1.8.12",
+    "fingerprintjs2": "^2.1.0",
+    "node-config-manager": "^2.1.0",
+    "redis": "^2.8.0",
+    "restify": "^8.5.1"
+  }
+}
