@@ -1,4 +1,7 @@
 {
+    "server": {
+        "port": 80
+    },
     "redis": {
         "uri": "redis://h:pf48bcfb8d795ba735e2d640292363d71d27d7165970b04e3dcb2ed22d2b2d953@ec2-52-19-128-243.eu-west-1.compute.amazonaws.com:21209"
     }

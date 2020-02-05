@@ -89,6 +89,6 @@ server.get('/*', restify.plugins.serveStatic({
     directory: './public'
 }));
 
-server.listen(8088, function () {
+server.listen(config.get('server.port'), function () {
     console.log('%s listening at %s', server.name, server.url);
 });
