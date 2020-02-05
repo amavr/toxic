@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">    
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -20,13 +21,14 @@
 
 <body>
     <div style="padding: 10px;">
+        <p>Скопируй сюда URL профиля пользователя</p>
     <div class="input-group mb-3">
         <div class="input-group-prepend">
-            <button class="btn btn-info" type="button" id="btn-look">LOOK</button>
+            <button class="btn btn-info" type="button" id="btn-look">Проверить</button>
         </div>
-        <input type="text" class="form-control" placeholder="User page" aria-label="User page" id="inp-url" disabled>
+        <input type="text" class="form-control" placeholder="https://vk.com/usernick" id="inp-url" disabled>
         <div class="input-group-append">
-            <button class="btn btn-danger" type="button" id="btn-toxic">TOXIC</button>
+            <button class="btn btn-danger" type="button" id="btn-toxic">Токсичный!</button>
         </div>
     </div>
 
@@ -58,7 +60,7 @@
                     },
                     data => {
                         console.log(data);
-                        $('#box-result').text('TOXICITY: ' + data.toxic + ' votes');
+                        $('#box-result').text('Токсичность: ' + data.toxic);
                     },
                     error => {
                         console.log(error);
@@ -74,7 +76,7 @@
                     },
                     data => {
                         console.log(data);
-                        $('#box-result').text('THANKS!');
+                        $('#box-result').text('Молодец, чё!');
                     },
                     error => {
                         console.log(error);
