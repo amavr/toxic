@@ -5,7 +5,8 @@ const restify = require('restify');
 const crypto = require('crypto');
 const redis = require('redis');
 
-const redis_client = redis.createClient(config.get('redis.port'), config.get('redis.host'));
+const redis_url = config.get('redis.uri');
+const redis_client = redis.createClient(redis_url);
 const server = restify.createServer();
 
 server.use(restify.plugins.acceptParser(server.acceptable));
