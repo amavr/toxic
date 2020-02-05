@@ -26,13 +26,15 @@
             <div class="input-group-prepend">
                 <button class="btn btn-info" type="button" id="btn-look">
                     Чек
-                    <span class="spinner-grow spinner-grow-sm" style="display: none;" role="status" aria-hidden="true"></span>
+                    <span class="spinner-grow spinner-grow-sm" style="display: none;" role="status"
+                        aria-hidden="true"></span>
                 </button>
             </div>
             <input type="text" class="form-control" placeholder="https://vk.com/usernick" id="inp-url" disabled>
             <div class="input-group-append">
                 <button class="btn btn-danger" type="button" id="btn-toxic">
-                    <span class="spinner-grow spinner-grow-sm" style="display: none;" role="status" aria-hidden="true"></span>
+                    <span class="spinner-grow spinner-grow-sm" style="display: none;" role="status"
+                        aria-hidden="true"></span>
                     Токс
                 </button>
             </div>
@@ -59,22 +61,27 @@
                 }, 500)
             }
 
-            let getToxic = function(){
+            let getToxic = function () {
                 const user_url = getUrl();
-                $('#btn-look .spinner-grow').show();
-                query.get({
-                    url: '/v1/' + user_url
-                },
-                    data => {
-                        $('#btn-look .spinner-grow').hide();
-                        console.log(data);
-                        $('#box-result').text('Токсичность: ' + data.toxic);
+                if (user_url) {
+                    $('#btn-look .spinner-grow').show();
+                    query.get({
+                        url: '/v1/' + user_url
                     },
-                    error => {
-                        $('#btn-look .spinner-grow').hide();
-                        console.log(error);
-                    }
-                )
+                        data => {
+                            $('#btn-look .spinner-grow').hide();
+                            console.log(data);
+                            $('#box-result').text('Токсичность: ' + data.toxic);
+                        },
+                        error => {
+                            $('#btn-look .spinner-grow').hide();
+                            console.log(error);
+                        }
+                    );
+                }
+                else{
+                    $('#box-result').text('Дружище, а URL профиля?');
+                }
             }
 
             $('#box-toxic').keypress(function (e) {
@@ -90,28 +97,37 @@
 
             $('#btn-toxic').on('click', e => {
                 const user_url = getUrl();
-                $('#btn-toxic .spinner-grow').show();
-                query.post({
-                    url: '/v1/' + user_url,
-                    data: fp
-                },
-                    data => {
-                        $('#btn-toxic .spinner-grow').hide();
-                        console.log(data);
-                        $('#box-result').text('Молодец, чё!');
+                if (user_url) {
+                    $('#btn-toxic .spinner-grow').show();
+                    query.post({
+                        url: '/v1/' + user_url,
+                        data: fp
                     },
-                    error => {
-                        $('#btn-toxic .spinner-grow').hide();
-                        console.log(error);
-                    }
-                )
+                        data => {
+                            $('#btn-toxic .spinner-grow').hide();
+                            console.log(data);
+                            $('#box-result').text('Молодец, чё!');
+                        },
+                        error => {
+                            $('#btn-toxic .spinner-grow').hide();
+                            console.log(error);
+                        }
+                    );
+                }
+                else {
+                    $('#box-result').text('Дружище, а URL профиля?');
+                }
             });
 
 
         }
 
         let getUrl = function () {
-            return b64EncodeUnicode($('#inp-url').val());
+            const url = $('#inp-url').val();
+            if (url)
+                return b64EncodeUnicode(url);
+            else
+                return null;
         }
 
         /// https://developer.mozilla.org/ru/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
