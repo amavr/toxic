@@ -4,9 +4,16 @@ const config = require('config');
 const restify = require('restify');
 const crypto = require('crypto');
 const redis = require('redis');
+const url = require('url');
 
-const redis_url = config.get('redis.uri');
-const redis_client = redis.createClient(redis_url);
+// const redis_url = config.get('redis.uri');
+// const redis_client = redis.createClient(redis_url);
+
+//var redisURL = url.parse(process.env.REDISCLOUD_URL);
+var redisURL = url.parse(config.get('redis.uri'));
+var redis_client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
+if(redisURL.auth) redis_client.auth(redisURL.auth.split(":")[1]);
+
 const server = restify.createServer();
 
 server.use(restify.plugins.acceptParser(server.acceptable));
