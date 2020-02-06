@@ -10,7 +10,7 @@ const url = require('url');
 // const redis_client = redis.createClient(redis_url);
 
 //var redisURL = url.parse(process.env.REDISCLOUD_URL);
-var redisURL = url.parse(config.get('redis.uri'));
+var redisURL = url.parse(process.env.PORT || config.get('redis.uri'));
 var redis_client = redis.createClient(redisURL.port, redisURL.hostname, {
     no_ready_check: true
 });
