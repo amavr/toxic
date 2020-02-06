@@ -11,8 +11,10 @@ const url = require('url');
 
 //var redisURL = url.parse(process.env.REDISCLOUD_URL);
 var redisURL = url.parse(config.get('redis.uri'));
-var redis_client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
-if(redisURL.auth) redis_client.auth(redisURL.auth.split(":")[1]);
+var redis_client = redis.createClient(redisURL.port, redisURL.hostname, {
+    no_ready_check: true
+});
+if (redisURL.auth) redis_client.auth(redisURL.auth.split(":")[1]);
 
 const server = restify.createServer();
 
@@ -29,11 +31,20 @@ server.get('/api/v1/:x', (req, res, next) => {
     redis_client.exists(url_key, (err, exists) => {
         if (exists === 1) {
             redis_client.get(url_key, (err, reply) => {
-                res.send(200, {toxic: reply});
-                next();
+
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.send(200, {
+                        toxic: reply
+                    });
+                    next();
+                }
             });
         } else {
-            res.send(200, {toxic: 0});
+            res.send(200, {
+                toxic: 0
+            });
             next();
         }
     });
