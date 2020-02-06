@@ -34,6 +34,10 @@ server.get('/api/v1/:x', (req, res, next) => {
 
                 if (err) {
                     console.log(err);
+                    res.send(400, {
+                        message: err
+                    });
+                    next();
                 } else {
                     res.send(200, {
                         toxic: reply
